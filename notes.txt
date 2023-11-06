@@ -1,0 +1,117 @@
+####criar projeto
+npx create-expo-app -t expo-template-blank-typescript
+
+###Executar
+npm run android
+
+###Imagens
+usar a nomeclatura img@2x.png, img@3x.png .... ajuda na renderização com isso carrega a 
+Imagens mais adequada para o dispositivo 
+
+###importações dinamica (Path Mapping)
+ele ajuda na hora de importar, não fica muito extenso o caminho e deixa mais flexivel
+npm install --save-dev babel-plugin-module-resolver
+
+--> configurar o alias no babel.config.js:
+ plugins: [
+      [
+        "module-resolver", 
+        {
+        root: ["./src"],
+        alias: {
+          "@assets": "./src/assets",
+          "@components": "./src/components",
+          "@routes": "./src/routes",
+          "@screens": "./src/screens",
+          "@storage": "./src/storage",
+          "@theme": "./src/theme",
+          "@utils": "./src/utils"
+        },
+      },
+    ],
+    ],
+--> Configurar o tsconfig.json para aparecer nas sugestões quando for importar
+"baseUrl": "./",
+    "paths": {
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@screens/*": [
+        "./src/screens/*"
+      ],
+      "@storage/*": [
+        "./src/storage/*"
+      ],
+      "@theme/*": [
+        "./src/theme/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ]
+    }
+  }
+
+  ###Styled Components
+  npm i styled-components
+  npm i --save-dev @types/styled-components @types/styled-components-react-native
+
+### Alias de Importação: para não ficar varias importações no cabeçalho 
+import * as S from './styles';
+
+export function Groups() {
+  return (
+    <S.Container>
+      <S.Text>Groups</S.Text>
+    </S.Container>
+  );
+}
+
+### Definindo o theme
+-->cria a pasta theme/index.ts
+-->no app.tsx importa o: import { ThemeProvider } from 'styled-components';
+e envolve ela em toda aplicação:
+  <ThemeProvider theme={theme}>
+    <Groups />
+  </ThemeProvider>
+--> criar a tipagem para aparecer como sugestões: cria uma pasta @types dentro da src 
+cria o arquivo styled.d.ts 
+--> para usar: background-color: ${({theme}) => theme.COLORS.GRAY_600 };
+
+### Instalar fontes
+npx expo install expo-font @expo-google-fonts/NOME_DA_FONTE
+---> importar no app e fazer a verificação se carregou as fontes
+const [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_700Bold
+  });
+
+{fontsLoaded ? <Groups /> : <Loading />}
+
+### Estilizando a StatusBar
+no app import {StatusBar} from "react-native"
+<StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+
+### importar imagem
+import logoImg from '@assets/logo.png';
+---> no @types criar um arquivo de tipagem para a imagem
+declare module '*.png';
+
+### importar icons
+npm install --save phosphor-react-native
+--> para usar, instalar o:
+npx expo install react-native-svg
+---> basta usar:
+import { CaretLeft } from 'phosphor-react-native';
+<CaretLeft color="#FFF" size={32}/>
+
+### Para estilizar um components que não é padrão (View, Text ...), algo externo (incons..):
+export const BackIcon = styled(CaretLeft).attrs(({ theme }) => ({
+  size: 36,
+  color: theme.COLORS.WHITE
+}))``;
