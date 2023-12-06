@@ -18,7 +18,7 @@
 <br>
 
 <p align="center">
-  <img alt="Ignite Teams" src="src/assets/Capa.png" width="100%">
+  <img alt="Ignite Teams" src="assets/Capa.png" width="100%">
 </p>
 
 ## 🚀 Tecnologias
