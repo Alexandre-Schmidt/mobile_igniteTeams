@@ -93,7 +93,7 @@ cria o arquivo styled.d.ts
 
 ### Instalar fontes
 npx expo install expo-font @expo-google-fonts/NOME_DA_FONTE
----> importar no app e fazer a verificação se carregou as fontes
+--> importar no app e fazer a verificação se carregou as fontes
 const [fontsLoaded] = useFonts({
     Roboto_400Regular,
     Roboto_700Bold
@@ -109,7 +109,7 @@ no app import {StatusBar} from "react-native"
 
 ### importar imagem
 import logoImg from '@assets/logo.png';
----> no @types criar um arquivo de tipagem para a imagem
+--> no @types criar um arquivo de tipagem para a imagem
 declare module '*.png';
 ##################################
 
@@ -117,7 +117,7 @@ declare module '*.png';
 npm install --save phosphor-react-native
 --> para usar, instalar o:
 npx expo install react-native-svg
----> basta usar:
+--> basta usar:
 import { CaretLeft } from 'phosphor-react-native';
 <CaretLeft color="#FFF" size={32}/>
 ##################################
@@ -137,7 +137,7 @@ export const Title = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
 `;
 
----> importar o css: import styled , {css} from "styled-components/native";
+--> importar o css: import styled , {css} from "styled-components/native";
 ficando assim:
 export const Title = styled.Text`
   ${({ theme }) => css`
@@ -161,4 +161,139 @@ uso:
   color="#fff"
   size={32}
 />
+##################################
+
+### Tipos de Navegação 
+https://reactnavigation.org/
+
+npm install @react-navigation/native
+
+dependencias: Precisa instalar tbm
+npx expo install react-native-screens react-native-safe-area-context
+
+tipos:
+--> StackNavigator: as telas são empilhadas umas sobre as outras. Quando você 
+navega para uma nova tela, ela é empilhada no topo da pilha, e você pode voltar 
+para a tela anterior removendo-a do topo da pilha
+    npm install @react-navigation/native-stack
+
+--> Tab Navigator: é utilizado para criar uma navegação baseada em abas na 
+parte inferior ou superior da tela. Cada aba representa uma tela ou um conjunto 
+de telas relacionadas.
+    npm install @react-navigation/bottom-tabs
+
+--> Drawer Navigator: cria um menu lateral que você pode deslizar para dentro e 
+para fora da tela. Isso é útil para navegação lateral em telas.
+    npm install @react-navigation/drawer
+##################################
+
+### criar as rotas da aplicação usando o StackNavigator
+-->criar a pasta routes com os arquivos:
+    app.routes.tsx
+    index.tsx (aqui define o contexto da navegação. Para todo mundo acessar )
+-->No app.tsx:
+-->importar no App.tsx
+    import { Routes } from "./src/routes";
+-->Tipar as rotas para aparecer como sugestão na hora de usar
+  -->no @types criar o arquivo navigation.d.ts
+--> para usar:
+  --> import {useNavigation} from "@react-navigation/native"
+  --> const navigation = useNavigation();
+  --> navigation.navigate("PaginaQSeraDirecionada")
+ou
+  --> import {NativeStackNavigationProp} from "@react-navigation/native-stack"
+  --> criar a tipagem
+      type RootParamList = {
+        groups: undefined;
+        new: undefined;
+        players: {
+          group: string;
+        }
+      }
+
+      type Props = {
+        navigation: NativeStackNavigationProp<RootParamList, 'groups'>
+      }
+        --> < RootParamList é a tipagem da rota , 'groups' é pagina que vc ta >
+  --> passa como parametro para o componente o navigation ex: export function Component({navigation}: Props) {....
+  --> navigation.navigate("PaginaQSeraDirecionada")
+##################################
+
+### Implementar o botão voltar
+--> importar
+import { useNavigation } from "@react-navigation/native";
+const navigation = useNavigation();
+
+--> usar para voltar uma tela
+function handleGoBack(){
+    navigation.goBack();
+  }
+
+ou
+
+--> voltar para pagina especifica
+function handleGoBack(){
+    navigation.navigate('home');
+  }
+##################################
+
+### Prevenindo Glitch na navegação
+Glitch é aquela tela branca que da quando passa de uma pagina para outra
+
+--> no index do routes envolver com uma View:
+export function Routes(){
+
+  const { COLORS } = useTheme();
+
+  return(
+    <View style={{ flex: 1, backgroundColor: COLORS.GRAY_600 }}>
+      <NavigationContainer>
+        <AppRoutes />
+      </NavigationContainer>
+    </View>
+  );
+}
+
+##################################
+
+###SafeAreaView
+usado para criar uma area segura em que a camera ou outros componentes que ficam na tela
+atrapalhe a visualização da tela
+
+--> instalar
+npm install react-native-safe-area-context
+
+--> no lugar da View coloca o SafeAreaView
+import {SafeAreaView} from 'react-native-safe-area-context'
+import styled from 'styled-components/native';
+
+export const Container = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${({ theme }) => theme.COLORS.GRAY_600};
+  padding: 24px;
+`;
+##################################
+
+###Prop Drilling
+é quando precisamos passar algo para um componente mas para isso tem que passar 
+por varias camadas de filhos até chegar onde vc quer (do passa para o filho e filho para o filho ...)
+
+resolução: centralizar em local para consulta como localStorage
+##################################
+
+###Async Storage
+é um sistema de armazenamento de chave-valor, assincrono e persistente. Salva em formato de texto.
+
+--> instalar
+npx expo install @react-native-async-storage/async-storage
+
+--> importar
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+--> usar
+try {
+    await AsyncStorage.setItem(GROUP_COLLECTION, newGroup); //primeiro parametro é chave e o segundo valor
+  } catch (error) {
+    throw error;
+  }
 ##################################
