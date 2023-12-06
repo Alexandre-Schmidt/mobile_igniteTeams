@@ -61,7 +61,6 @@ npm install
 # Execute a aplicação
 npx expo start
 
-# O servidor inciará na porta:3000 - acesse http://localhost:3000
 ```
 
 ## :memo: Licença
