@@ -18,7 +18,7 @@
 <br>
 
 <p align="center">
-  <img alt="projeto DT Money 2.0" src="src/assets/Capa.png" width="100%">
+  <img alt="Ignite Teams" src="src/assets/Capa.png" width="100%">
 </p>
 
 ## 🚀 Tecnologias
