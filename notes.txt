@@ -1,3 +1,6 @@
+consulta:
+https://github.com/mferreiradb/ignite-teams
+
 ####criar projeto
 npx create-expo-app -t expo-template-blank-typescript
 ##################################
